@@ -12,7 +12,7 @@ const features = [
 
 export const AppShowcase = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "200px" });
   const [portfolioValue, setPortfolioValue] = useState(2547890);
 
   // Animate portfolio value ticking up
@@ -36,7 +36,7 @@ export const AppShowcase = () => {
   };
 
   return (
-    <section className="relative py-24 px-6 overflow-hidden" ref={ref}>
+    <section id="about" className="relative py-24 px-6 overflow-hidden" ref={ref}>
       {/* Background elements */}
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-champagne/5 rounded-full blur-3xl" />

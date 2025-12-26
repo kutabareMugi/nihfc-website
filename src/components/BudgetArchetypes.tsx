@@ -61,7 +61,7 @@ const archetypes = [
 
 export const BudgetArchetypes = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "200px" });
   const [activeTab, setActiveTab] = useState("surplus");
 
   const activeArchetype = archetypes.find((a) => a.id === activeTab)!;

@@ -99,7 +99,7 @@ export const Header = () => {
           transition={{ duration: 0.3 }}
           className="md:hidden overflow-hidden"
         >
-          <div className="glass-card mt-2 p-6">
+          <div className="glass-card mt-2 p-6 bg-background/95 backdrop-blur-xl border-white/10">
             <nav className="flex flex-col gap-4 mb-6">
               {navLinks.map((link) => (
                 <a

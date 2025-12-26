@@ -3,7 +3,7 @@ import { Globe, Mail, Phone, Shield, ExternalLink } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="relative py-16 px-6 border-t border-white/5">
+    <footer id="contact" className="relative py-16 px-6 border-t border-white/5">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}

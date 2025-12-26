@@ -28,10 +28,10 @@ const item = {
 
 export const VaultSection = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "200px" });
 
   return (
-    <section className="relative py-24 px-6" ref={ref}>
+    <section id="services" className="relative py-24 px-6" ref={ref}>
       <div className="mx-auto max-w-7xl">
         {/* Section Header */}
         <motion.div

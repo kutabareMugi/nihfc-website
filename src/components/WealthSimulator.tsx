@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValue } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Slider } from "@/components/ui/slider";
@@ -35,35 +35,46 @@ const getYAxisDomain = (investment: number) => {
 
 export const WealthSimulator = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "200px" });
   const [investment, setInvestment] = useState([1000000]); // 10 Lakhs default
   const [chartData, setChartData] = useState(generateChartData(1000000));
-  const [animatedValue, setAnimatedValue] = useState(0);
+  const [animatedFinalValue, setAnimatedFinalValue] = useState(0);
 
+  // Update chart data smoothly with debounce
   useEffect(() => {
-    setChartData(generateChartData(investment[0]));
+    const timeoutId = setTimeout(() => {
+      setChartData(generateChartData(investment[0]));
+    }, 50);
+    
+    return () => clearTimeout(timeoutId);
   }, [investment]);
 
   // Animate the final value
   useEffect(() => {
     if (isInView) {
       const finalValue = calculateGrowth(investment[0], 7, 0.12);
-      let start = 0;
-      const duration = 1500;
+      const duration = 800;
       const startTime = Date.now();
+      let animationFrame: number;
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easeOut = 1 - Math.pow(1 - progress, 3);
-        setAnimatedValue(finalValue * easeOut);
+        setAnimatedFinalValue(finalValue * easeOut);
 
         if (progress < 1) {
-          requestAnimationFrame(animate);
+          animationFrame = requestAnimationFrame(animate);
         }
       };
 
       animate();
+      
+      return () => {
+        if (animationFrame) {
+          cancelAnimationFrame(animationFrame);
+        }
+      };
     }
   }, [investment, isInView]);
 
@@ -77,7 +88,7 @@ export const WealthSimulator = () => {
   };
 
   return (
-    <section className="relative py-24 px-6 overflow-hidden" ref={ref}>
+    <section id="growth" className="relative py-24 px-6 overflow-hidden" ref={ref}>
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-3xl" />
 
@@ -114,17 +125,23 @@ export const WealthSimulator = () => {
                 <Wallet className="w-5 h-5 text-foreground/60" />
                 <span className="text-sm text-foreground/60">Investment Amount</span>
               </div>
-              <span className="text-2xl font-bold text-gradient">
+              <motion.span 
+                key={investment[0]}
+                className="text-2xl font-bold text-gradient inline-block min-w-[140px] text-right"
+                initial={{ opacity: 0.7, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+              >
                 {formatCurrency(investment[0])}
-              </span>
+              </motion.span>
             </div>
             <Slider
               value={investment}
               onValueChange={setInvestment}
               min={100000}
               max={10000000}
-              step={100000}
-              className="w-full"
+              step={50000}
+              className="w-full cursor-grab active:cursor-grabbing"
             />
             <div className="flex justify-between mt-2 text-xs text-foreground/40">
               <span>₹1L</span>
@@ -135,7 +152,7 @@ export const WealthSimulator = () => {
           {/* Chart */}
           <div className="h-[300px] mb-8">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
+              <LineChart data={chartData} key={`chart-${investment[0]}`}>
                 <XAxis
                   dataKey="year"
                   stroke="hsl(var(--foreground) / 0.3)"
@@ -167,20 +184,29 @@ export const WealthSimulator = () => {
                   type="monotone"
                   dataKey="savings"
                   stroke="hsl(var(--foreground) / 0.3)"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   dot={false}
                   strokeDasharray="5 5"
                   name="Savings Account"
+                  animationDuration={600}
+                  animationEasing="ease-in-out"
+                  isAnimationActive={true}
                 />
                 {/* NIHFC line */}
                 <Line
                   type="monotone"
                   dataKey="nihfc"
                   stroke="hsl(var(--secondary))"
-                  strokeWidth={3}
+                  strokeWidth={3.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   dot={false}
                   name="NIHFC Strategy"
-                  className={isInView ? "animate-draw-line" : ""}
+                  animationDuration={700}
+                  animationEasing="ease-in-out"
+                  isAnimationActive={true}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -199,7 +225,7 @@ export const WealthSimulator = () => {
               <div className="flex items-center justify-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald" />
                 <span className="text-xl font-bold text-gradient-blue">
-                  {formatCurrency(animatedValue)}
+                  {formatCurrency(animatedFinalValue)}
                 </span>
               </div>
             </div>
