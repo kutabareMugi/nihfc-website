@@ -150,94 +150,141 @@ export const FutureHorizons = () => {
         </motion.div>
       </div>
 
-      {/* Horizontal Scroll - Centered container */}
+      {/* Desktop Grid / Mobile Scroll */}
       <div className="relative">
+        {/* Desktop Grid */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-6 px-6 max-w-7xl mx-auto">
+          {opportunities.map((opportunity, index) => {
+            const Icon = opportunity.icon;
+            return (
+              <motion.div
+                key={opportunity.title}
+                initial={{ opacity: 0, y: 50 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <div className="glass-card-hover h-full p-6 relative overflow-hidden group transition-all duration-300 hover:scale-105">
+                  {/* Background gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${opportunity.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+                  <div className="relative z-10">
+                    {/* Icon */}
+                    <div className="p-3 rounded-xl bg-foreground/5 w-fit mb-6 group-hover:bg-foreground/10 transition-colors duration-300">
+                      <Icon className="w-6 h-6 text-foreground/70 group-hover:text-foreground transition-colors duration-300" />
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-xl font-bold mb-3 group-hover:text-gradient transition-all duration-300">
+                      {opportunity.title}
+                    </h3>
+                    <p className="text-sm text-foreground/60 leading-relaxed">
+                      {opportunity.description}
+                    </p>
+
+                    {/* Arrow indicator */}
+                    <div className="mt-6 flex items-center gap-2 text-foreground/40 group-hover:text-foreground/70 transition-colors duration-300">
+                      <span className="text-xs font-medium tracking-wide">Learn More</span>
+                      <svg
+                        className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Mobile Horizontal Scroll */}
         <div
           ref={scrollRef}
-          className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory scroll-smooth"
+          className="flex lg:hidden gap-6 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory scroll-smooth"
           style={{ 
             scrollPaddingInline: 'calc(50vw - 150px)',
             paddingInline: 'max(1.5rem, calc(50vw - 150px))'
           }}
         >
           {opportunities.map((opportunity, index) => {
-          const Icon = opportunity.icon;
-          const isActive = index === activeIndex;
-          return (
-            <motion.div
-              key={opportunity.title}
-              initial={{ opacity: 0, x: 50 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="flex-shrink-0 w-[300px] sm:w-[350px] snap-center"
-            >
-              <div 
-                className={`glass-card-hover h-full p-6 relative overflow-hidden transition-all duration-500 ${
-                  isActive 
-                    ? `md:hover:scale-105 ${getGlowClass(opportunity.glowColor)}` 
-                    : 'md:hover:scale-105'
-                }`}
-                style={{
-                  filter: isActive ? 'blur(0px)' : 'blur(2px)',
-                  opacity: isActive ? 1 : 0.5,
-                }}
+            const Icon = opportunity.icon;
+            const isActive = index === activeIndex;
+            return (
+              <motion.div
+                key={opportunity.title}
+                initial={{ opacity: 0, x: 50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="flex-shrink-0 w-[300px] sm:w-[350px] snap-center"
               >
-                {/* Background gradient - only show on desktop hover or mobile active */}
                 <div 
-                  className={`absolute inset-0 bg-gradient-to-br ${opportunity.gradient} transition-opacity duration-500 ${
-                    isActive ? 'opacity-100 md:opacity-0 md:group-hover:opacity-100' : 'opacity-0'
-                  }`} 
-                />
-
-                <div className="relative z-10">
-                  {/* Icon */}
+                  className={`glass-card-hover h-full p-6 relative overflow-hidden transition-all duration-500 ${
+                    isActive ? getGlowClass(opportunity.glowColor) : ''
+                  }`}
+                  style={{
+                    filter: isActive ? 'blur(0px)' : 'blur(2px)',
+                    opacity: isActive ? 1 : 0.5,
+                  }}
+                >
+                  {/* Background gradient - only show when active on mobile */}
                   <div 
-                    className={`p-3 rounded-xl bg-foreground/5 w-fit mb-6 transition-colors duration-300 ${
-                      isActive ? 'bg-foreground/10 md:bg-foreground/5 md:group-hover:bg-foreground/10' : ''
-                    }`}
-                  >
-                    <Icon 
-                      className={`w-6 h-6 transition-colors duration-300 ${
-                        isActive ? 'text-foreground md:text-foreground/70 md:group-hover:text-foreground' : 'text-foreground/70'
-                      }`} 
-                    />
-                  </div>
+                    className={`absolute inset-0 bg-gradient-to-br ${opportunity.gradient} transition-opacity duration-500 ${
+                      isActive ? 'opacity-100' : 'opacity-0'
+                    }`} 
+                  />
 
-                  {/* Content */}
-                  <h3 
-                    className={`text-xl font-bold mb-3 transition-all duration-300 ${
-                      isActive ? 'text-gradient md:text-foreground md:group-hover:text-gradient' : ''
-                    }`}
-                  >
-                    {opportunity.title}
-                  </h3>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
-                    {opportunity.description}
-                  </p>
-
-                  {/* Arrow indicator */}
-                  <div 
-                    className={`mt-6 flex items-center gap-2 transition-colors duration-300 ${
-                      isActive ? 'text-foreground/70 md:text-foreground/40 md:group-hover:text-foreground/70' : 'text-foreground/40'
-                    }`}
-                  >
-                    <span className="text-xs font-medium tracking-wide">Learn More</span>
-                    <svg
-                      className={`w-4 h-4 transform transition-transform duration-300 ${
-                        isActive ? 'translate-x-1 md:translate-x-0 md:group-hover:translate-x-1' : ''
+                  <div className="relative z-10">
+                    {/* Icon */}
+                    <div 
+                      className={`p-3 rounded-xl bg-foreground/5 w-fit mb-6 transition-colors duration-300 ${
+                        isActive ? 'bg-foreground/10' : ''
                       }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                      <Icon 
+                        className={`w-6 h-6 transition-colors duration-300 ${
+                          isActive ? 'text-foreground' : 'text-foreground/70'
+                        }`} 
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <h3 
+                      className={`text-xl font-bold mb-3 transition-all duration-300 ${
+                        isActive ? 'text-gradient' : ''
+                      }`}
+                    >
+                      {opportunity.title}
+                    </h3>
+                    <p className="text-sm text-foreground/60 leading-relaxed">
+                      {opportunity.description}
+                    </p>
+
+                    {/* Arrow indicator */}
+                    <div 
+                      className={`mt-6 flex items-center gap-2 transition-colors duration-300 ${
+                        isActive ? 'text-foreground/70' : 'text-foreground/40'
+                      }`}
+                    >
+                      <span className="text-xs font-medium tracking-wide">Learn More</span>
+                      <svg
+                        className={`w-4 h-4 transform transition-transform duration-300 ${
+                          isActive ? 'translate-x-1' : ''
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          );
-        })}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 

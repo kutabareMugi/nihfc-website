@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Download } from "lucide-react";
@@ -13,10 +13,22 @@ const navLinks = [
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showMobileAppButton, setShowMobileAppButton] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollY = window.scrollY;
+      const scrollThreshold = 50;
+      
+      setIsScrolled(currentScrollY > scrollThreshold);
+      
+      // Show app button when header becomes sticky
+      if (currentScrollY > scrollThreshold) {
+        setShowMobileAppButton(true);
+        setIsMobileMenuOpen(false); // Close menu if open
+      } else {
+        setShowMobileAppButton(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -75,18 +87,54 @@ export const Header = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 -mr-2"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+          {/* Mobile Menu Toggle / Get App Button */}
+          <div className="md:hidden relative w-[100px] h-10 flex items-center justify-end">
+            <AnimatePresence mode="wait">
+              {showMobileAppButton ? (
+                <motion.div
+                  key="app-button"
+                  initial={{ opacity: 0, scale: 0.9, y: -5 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: 5 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    ease: [0.4, 0.0, 0.2, 1] // Smooth ease-in-out
+                  }}
+                  className="absolute right-0"
+                >
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="gap-2"
+                    onClick={() => window.open('#', '_blank')}
+                  >
+                    <Download className="w-4 h-4" />
+                    Get App
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.button
+                  key="menu-button"
+                  initial={{ opacity: 0, scale: 0.9, y: 5 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -5 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    ease: [0.4, 0.0, 0.2, 1] // Smooth ease-in-out
+                  }}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="p-2 -mr-2 absolute right-0"
+                  aria-label="Toggle menu"
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="w-6 h-6" />
+                  ) : (
+                    <Menu className="w-6 h-6" />
+                  )}
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Mobile Menu */}

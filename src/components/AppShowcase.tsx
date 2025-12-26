@@ -66,10 +66,10 @@ export const AppShowcase = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative flex justify-center"
+            className="relative flex justify-center lg:justify-start w-full mx-auto lg:mx-0 max-w-[280px] lg:max-w-none"
           >
-            {/* Floating features */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            {/* Floating features - hidden on mobile */}
+            <div className="absolute inset-0 hidden md:flex items-center justify-center">
               {features.map((feature, index) => {
                 const Icon = feature.icon;
                 const angle = (index * 90 + 45) * (Math.PI / 180);
@@ -187,43 +187,45 @@ export const AppShowcase = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center lg:text-left"
+            className="text-center lg:text-left px-4 lg:px-0"
           >
             <div className="flex items-center gap-2 justify-center lg:justify-start mb-6">
-              <Smartphone className="w-5 h-5 text-secondary" />
+              <Smartphone className="w-5 h-5 text-secondary flex-shrink-0" />
               <span className="text-sm text-foreground/60">Available on Android</span>
             </div>
 
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 break-words">
               Track, Invest, and Grow — Anytime, Anywhere
             </h3>
 
-            <p className="text-foreground/60 mb-8">
+            <p className="text-foreground/60 mb-8 break-words">
               Experience seamless portfolio management with real-time updates, 
               instant SIP investments, and comprehensive analytics — all secured 
               with bank-grade encryption.
             </p>
 
             {/* Feature list */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
                   <div key={feature.label} className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-secondary/10">
+                    <div className="p-2 rounded-lg bg-secondary/10 flex-shrink-0">
                       <Icon className="w-4 h-4 text-secondary" />
                     </div>
-                    <span className="text-sm">{feature.label}</span>
+                    <span className="text-sm break-words">{feature.label}</span>
                   </div>
                 );
               })}
             </div>
 
             {/* CTA */}
-            <Button variant="hero" size="xl" className="w-full sm:w-auto gap-3">
-              <Download className="w-5 h-5" />
-              Get the APK (v1.2) - Direct Download
-            </Button>
+            <div className="flex justify-center lg:justify-start">
+              <Button variant="hero" size="lg" className="w-full sm:w-auto gap-2 text-sm px-4 py-2 sm:px-6 sm:py-3">
+                <Download className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">Get the APK (v1.2)</span>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </div>
