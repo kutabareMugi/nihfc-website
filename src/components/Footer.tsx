@@ -23,13 +23,13 @@ export const Footer = () => {
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="https://nihfc.in"
+                href="https://nihfc.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
               >
                 <Globe className="w-4 h-4" />
-                NIHFC.IN
+                NIHFC.COM
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
@@ -68,11 +68,11 @@ export const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="mailto:contact@nihfc.in"
+                  href="mailto:contact@nihfc.com"
                   className="flex items-center gap-2 text-sm text-foreground/50 hover:text-foreground transition-colors"
                 >
                   <Mail className="w-4 h-4" />
-                  contact@nihfc.in
+                  contact@nihfc.com
                 </a>
               </li>
               <li>

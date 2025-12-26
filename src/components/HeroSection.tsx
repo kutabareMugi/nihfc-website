@@ -1,9 +1,12 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Download, Calendar, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedMesh } from "./AnimatedMesh";
 
 export const HeroSection = () => {
+  const { scrollY } = useScroll();
+  const scrollIndicatorOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden px-6 pt-20 pb-32 lg:pt-24">
       {/* Hero gradient overlay */}
@@ -77,7 +80,7 @@ export const HeroSection = () => {
         className="absolute bottom-32 md:bottom-24 left-0 right-0 overflow-hidden"
       >
         <div className="flex items-center animate-ticker whitespace-nowrap">
-          {[...Array(2)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <div key={i} className="flex items-center gap-8 px-4">
               <span className="text-sm text-foreground/50 tracking-wide">₹5Cr+ AUM</span>
               <span className="text-champagne/50">◆</span>
@@ -94,11 +97,12 @@ export const HeroSection = () => {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator - fades on scroll */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.8 }}
+        style={{ opacity: scrollIndicatorOpacity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-2">
