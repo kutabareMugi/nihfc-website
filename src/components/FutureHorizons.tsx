@@ -68,15 +68,13 @@ export const FutureHorizons = () => {
         </motion.div>
       </div>
 
-      {/* Horizontal Scroll */}
-      <div
-        ref={scrollRef}
-        className="flex gap-6 overflow-x-auto scrollbar-hide px-6 pb-4 snap-x snap-mandatory"
-      >
-        {/* Spacer for center alignment on larger screens */}
-        <div className="flex-shrink-0 w-0 lg:w-[calc((100vw-1200px)/2)]" />
-
-        {opportunities.map((opportunity, index) => {
+      {/* Horizontal Scroll - Centered container */}
+      <div className="flex justify-center">
+        <div
+          ref={scrollRef}
+          className="flex gap-6 overflow-x-auto scrollbar-hide px-6 pb-4 snap-x snap-mandatory max-w-full"
+        >
+          {opportunities.map((opportunity, index) => {
           const Icon = opportunity.icon;
           return (
             <motion.div
@@ -121,9 +119,7 @@ export const FutureHorizons = () => {
             </motion.div>
           );
         })}
-
-        {/* Spacer for center alignment on larger screens */}
-        <div className="flex-shrink-0 w-0 lg:w-[calc((100vw-1200px)/2)]" />
+        </div>
       </div>
 
       {/* Scroll hint for mobile */}

@@ -20,6 +20,19 @@ const generateChartData = (investment: number) => {
   return data;
 };
 
+// Dynamic Y-axis domain calculation
+const getYAxisDomain = (investment: number) => {
+  const maxValue = calculateGrowth(investment, 7, 0.12);
+  // Round up to nearest nice number for Y-axis max
+  if (maxValue >= 10000000) {
+    return [0, Math.ceil(maxValue / 5000000) * 5000000]; // Round to 50L increments
+  } else if (maxValue >= 1000000) {
+    return [0, Math.ceil(maxValue / 500000) * 500000]; // Round to 5L increments
+  } else {
+    return [0, Math.ceil(maxValue / 100000) * 100000]; // Round to 1L increments
+  }
+};
+
 export const WealthSimulator = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -136,6 +149,8 @@ export const WealthSimulator = () => {
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(value) => formatCurrency(value)}
+                  domain={getYAxisDomain(investment[0])}
+                  tickCount={6}
                 />
                 <Tooltip
                   contentStyle={{
